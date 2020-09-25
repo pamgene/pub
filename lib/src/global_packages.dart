@@ -83,7 +83,9 @@ class GlobalPackages {
   /// existing binstubs in other packages will be overwritten by this one's.
   /// Otherwise, the previous ones will be preserved.
   Future activateGit(String repo, List<String> executables,
-      {Map<String, FeatureDependency> features, bool overwriteBinStubs}) async {
+      {String reference,
+      Map<String, FeatureDependency> features,
+      bool overwriteBinStubs}) async {
     var name = await cache.git.getPackageNameFromRepo(repo);
     // Call this just to log what the current active package is, if any.
     _describeActive(name);
@@ -94,7 +96,7 @@ class GlobalPackages {
     // changed (see also issue 20499).
     await _installInCache(
         cache.git.source
-            .refFor(name, repo)
+            .refFor(name, repo, reference: reference)
             .withConstraint(VersionConstraint.any)
             .withFeatures(features ?? const {}),
         executables,

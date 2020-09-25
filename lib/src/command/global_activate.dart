@@ -96,10 +96,14 @@ class GlobalActivateCommand extends PubCommand {
     switch (argResults['source']) {
       case 'git':
         var repo = readArg('No Git repository given.');
-        // TODO(rnystrom): Allow passing in a Git ref too.
+        String ref;
+
+        if (args.isNotEmpty) {
+          ref = readArg();
+        }
         validateNoExtraArgs();
         return globals.activateGit(repo, executables,
-            features: features, overwriteBinStubs: overwrite);
+            reference: ref, features: features, overwriteBinStubs: overwrite);
 
       case 'hosted':
         var package = readArg('No package to activate given.');
